@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #FFE5EC;
+            overflow-x: hidden;
+        }
+
+        /* Initial Page Styles */
+        .initial-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .initial-page h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #FF69B4;
+            font-family: 'Brush Script MT', cursive;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .yes-button, .no-button {
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .yes-button {
+            background: #FF69B4;
+            color: white;
+            z-index: 10;
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5);
+        }
+
+        .yes-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
+        }
+
+        .no-button {
+            background: #FFB6C1;
+            color: #666;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        /* Emoji Animation */
+        .emoji-explosion {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: float-up 3s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-header {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: #FF69B4;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .section-subheader {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: #666;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* First Section */
+        .stickers-container {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            font-size: 5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .change-mind-button {
+            padding: 1rem 2rem;
+            background: #FFB6C1;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stuck-message {
+            display: none;
+            font-size: 1.5rem;
+            color: #FF69B4;
+            margin-top: 2rem;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Date Ideas Section */
+        .date-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .date-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .date-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+        }
+
+        .date-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .date-card-text {
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Secret Note Section */
+        .envelope {
+            width: 200px;
+            height: 150px;
+            background: #FF69B4;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-top: 75px solid #FFB6C1;
+        }
+
+        .love-message {
+            display: none;
+            max-width: 600px;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .love-message p {
+            color: #333;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Memories Section */
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .memory-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .memory-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .memory-gift {
+            font-size: 4rem;
+            transition: all 0.3s ease;
+        }
+
+        .memory-card.revealed .memory-gift {
+            display: none;
+        }
+
+        .memory-image {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .memory-card.revealed .memory-image {
+            display: block;
+        }
+
+        .memory-caption {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 105, 180, 0.9);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .memory-card.revealed .memory-caption {
+            display: block;
+        }
+
+        /* Love Things Section */
+        .love-things-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .love-thing-card {
+            background: #FFB6C1;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Surprises Section */
+        .surprises-scroll {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 2rem 0;
+            max-width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #FF69B4 #FFE5EC;
+        }
+
+        .surprises-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .surprises-scroll::-webkit-scrollbar-track {
+            background: #FFE5EC;
+        }
+
+        .surprises-scroll::-webkit-scrollbar-thumb {
+            background: #FF69B4;
+            border-radius: 10px;
+        }
+
+        .surprise-card {
+            min-width: 280px;
+            background: #FFB6C1;
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.3);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+
+        .surprise-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+        }
+
+        .surprise-card:active {
+            transform: scale(0.95);
+        }
+
+        .surprise-label {
+            display: block;
+        }
+
+        .surprise-message {
+            display: none;
+            font-size: 1rem;
+        }
+
+        .surprise-card.revealed .surprise-label {
+            display: none;
+        }
+
+        .surprise-card.revealed .surprise-message {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #FFB6C1;
+            color: white;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .memories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .date-cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Initial Page -->
+    <div class="initial-page" id="initialPage">
+        <h1>Will you be my Valentine? ❤️</h1>
+        <div class="button-container">
+            <button class="yes-button" id="yesButton">Yes ❤️</button>
+            <button class="no-button" id="noButton">No</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- First Section -->
+        <section class="section">
+            <h2 class="section-header">Good choice baby 😊</h2>
+            <p class="section-subheader">You just unlocked unlimited hugs, kisses, and cuddles (redeemable very soon I promise)</p>
+            <div class="stickers-container">
+                <span>🐻</span>
+                <span>💕</span>
+                <span>🐰</span>
+            </div>
+            <button class="change-mind-button" id="changeMindButton">Or do you want to change your mind? 🤔</button>
+            <p class="stuck-message" id="stuckMessage">No! you're stuck with me forever ∞</p>
+        </section>
+
+        <!-- Second Section: Virtual Date Ideas -->
+        <section class="section">
+            <h2 class="section-header">Our Virtual Date Ideas 📱</h2>
+            <p class="section-subheader">Ways we can spend our special day together</p>
+            <div class="date-cards-container">
+                <div class="date-card">
+                    <div class="date-card-icon">🎬</div>
+                    <div class="date-card-text">Netflix party + video call (I'll let you pick... maybe)</div>
+                </div>
+                <div class="date-card">
+                    <div class="date-card-icon">🍕</div>
+                    <div class="date-card-text">Order the same food together & judge each other's eating habits</div>
+                </div>
+                <div class="date-card">
+                    <div class="date-card-icon">💬</div>
+                    <div class="date-card-text">Late night talks that somehow turn into sleeping thing</div>
+                </div>
+                <div class="date-card">
+                    <div class="date-card-icon">🎵</div>
+                    <div class="date-card-text">Playlist exchange & argue about music taste (you're wrong btw)</div>
+                </div>
+                <div class="date-card">
+                    <div class="date-card-icon">📸</div>
+                    <div class="date-card-text">Send me your selfies so I can simp shamelessly 😍</div>
+                </div>
+                <div class="date-card">
+                    <div class="date-card-icon">🎮</div>
+                    <div class="date-card-text">Play games together & watch you absolutely destroy me</div>
+                </div>
+                <div class="date-card">
+                    <div class="date-card-icon">☕</div>
+                    <div class="date-card-text">Virtual coffee dates where we pretend we're fancy</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Third Section: Secret Note -->
+        <section class="section">
+            <h2 class="section-header">A Secret Note For You 💌</h2>
+            <p class="section-subheader">Click the envelope to open it...</p>
+            <div class="envelope" id="envelope"></div>
+            <div class="love-message" id="loveMessage">
+                <p>
+                    My dearest Valentine,<br><br>
+                    You're always in my heart. Every message from you makes my day brighter, 
+                    every call makes me smile wider, and every moment we share  is precious to me. 
+                    You're not just my girlfriend, you're my best friend, my happiness, and my favorite person in the world. 
+                    Know that I'm always thinking of you, always missing you, and always loving you more than words can say.
+                    <br><br>
+                    Forever yours,<br>
+                    Your boyfriend who loves you endlessly ❤️
+                </p>
+            </div>
+        </section>
+
+       
+
+        <!-- Fifth Section: Things I Love -->
+        <section class="section">
+            <h2 class="section-header">Things I Love About You ❤️</h2>
+            <p class="section-subheader">Just a few of the infinite reasons you're amazing</p>
+            <div class="love-things-container">
+                <div class="love-thing-card">Your smile that lights up my whole day ✨</div>
+                <div class="love-thing-card">How caring and thoughtful you always are 💕</div>
+                <div class="love-thing-card">The way you laugh at my terrible jokes 😄</div>
+                <div class="love-thing-card">Your beautiful heart and kind soul 🌸</div>
+                <div class="love-thing-card">How you make even the ordinary feel special 🎀</div>
+                <div class="love-thing-card">The way you understand me like no one else 🤝</div>
+                <div class="love-thing-card">Your strength and how you inspire me daily 💪</div>
+                <div class="love-thing-card">How you make distance feel a little less far 🌍</div>
+                
+            </div>
+        </section>
+
+        <!-- Last Section: Secret Surprises -->
+        <section class="section">
+            <h2 class="section-header">Secret Surprises 🎁</h2>
+            <p class="section-subheader">Tap each card to reveal a surprise message 💛</p>
+            <div class="surprises-scroll">
+                <div class="surprise-card" onclick="revealSurprise(this)">
+                    <span class="surprise-label">Surprise #1 ✨</span>
+                    <span class="surprise-message">I'm counting down the days until I can hold you again 💑</span>
+                </div>
+                <div class="surprise-card" onclick="revealSurprise(this)">
+                    <span class="surprise-label">Surprise #2 💝</span>
+                    <span class="surprise-message">You're the first thing I think about when I wake up 🌅</span>
+                </div>
+                <div class="surprise-card" onclick="revealSurprise(this)">
+                    <span class="surprise-label">Surprise #3 🌹</span>
+                    <span class="surprise-message">Your voice is my favorite sound in the world 🎵</span>
+                </div>
+                <div class="surprise-card" onclick="revealSurprise(this)">
+                    <span class="surprise-label">Surprise #4 💫</span>
+                    <span class="surprise-message">I'm saving all my hugs for you (there's A LOT) 🤗</span>
+                </div>
+                <div class="surprise-card" onclick="revealSurprise(this)">
+                    <span class="surprise-label">Surprise #5 🎀</span>
+                    <span class="surprise-message">You make my heart do that weird happy flutter thing 💓</span>
+                </div>
+                <div class="surprise-card" onclick="revealSurprise(this)">
+                    <span class="surprise-label">Surprise #6 💖</span>
+                    <span class="surprise-message">I fall for you more every single day ✨</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Made with love + mentions + by your gandu boyfriend 💖</p>
+            <p>P.S. I love you more than you love food. Yeah, I said it 😏</p>
+        </div>
+    </div>
+
+    <script>
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const initialPage = document.getElementById('initialPage');
+        const mainContent = document.getElementById('mainContent');
+        const changeMindButton = document.getElementById('changeMindButton');
+        const stuckMessage = document.getElementById('stuckMessage');
+        const envelope = document.getElementById('envelope');
+        const loveMessage = document.getElementById('loveMessage');
+
+        let noButtonClicks = 0;
+        let yesButtonScale = 1;
+
+        // Mobile detection
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Position no button initially beside yes button
+        function positionNoButton() {
+            noButton.style.position = 'relative';
+            noButton.style.left = 'auto';
+            noButton.style.top = 'auto';
+        }
+        positionNoButton();
+
+        // No button behavior
+        if (isMobile) {
+            noButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                moveNoButton();
+                growYesButton();
+            });
+        } else {
+            noButton.addEventListener('mouseenter', () => {
+                moveNoButton();
+                growYesButton();
+            });
+        }
+
+        function moveNoButton() {
+            const container = initialPage;
+            const maxX = container.clientWidth - noButton.offsetWidth - 40;
+            const maxY = container.clientHeight - noButton.offsetHeight - 40;
+            
+            const randomX = Math.random() * maxX + 20;
+            const randomY = Math.random() * maxY + 20;
+            
+            noButton.style.position = 'absolute';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+            noButtonClicks++;
+        }
+
+        function growYesButton() {
+            yesButtonScale += 0.1;
+            yesButton.style.transform = `scale(${yesButtonScale})`;
+        }
+
+        // Yes button click
+        yesButton.addEventListener('click', () => {
+            // Create emoji explosion
+            createEmojiExplosion();
+            
+            // Transition to main content after animation
+            setTimeout(() => {
+                initialPage.style.display = 'none';
+                mainContent.style.display = 'block';
+                window.scrollTo(0, 0);
+            }, 1000);
+        });
+
+        // Emoji explosion function
+        function createEmojiExplosion() {
+            const emojiContainer = document.createElement('div');
+            emojiContainer.className = 'emoji-explosion';
+            document.body.appendChild(emojiContainer);
+
+            const emojis = ['❤️', '💕', '💖', '💗', '💓', '💝', '💘', '💞', '💌', '🌹', '😍', '🥰', '😘', '💑', '👩‍❤️‍👨', '✨', '🎀', '🦋', '🌸', '💐'];
+            
+            // Create 50 emojis
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'floating-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * 100 + '%';
+                    emoji.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+                    emoji.style.animationDelay = '0s';
+                    emoji.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    emojiContainer.appendChild(emoji);
+                }, i * 30);
+            }
+
+            // Remove container after animation
+            setTimeout(() => {
+                document.body.removeChild(emojiContainer);
+            }, 4000);
+        }
+
+        // Change mind button
+        if (isMobile) {
+            changeMindButton.addEventListener('click', () => {
+                changeMindButton.style.opacity = '0';
+                setTimeout(() => {
+                    changeMindButton.style.display = 'none';
+                    stuckMessage.style.display = 'block';
+                }, 300);
+            });
+        } else {
+            changeMindButton.addEventListener('mouseenter', () => {
+                changeMindButton.style.opacity = '0';
+                setTimeout(() => {
+                    changeMindButton.style.display = 'none';
+                    stuckMessage.style.display = 'block';
+                }, 300);
+            });
+        }
+
+        // Envelope click
+        envelope.addEventListener('click', () => {
+            loveMessage.style.display = 'block';
+            envelope.style.transform = 'scale(0.8)';
+        });
+
+        // Memory reveal
+        function revealMemory(card) {
+            card.classList.add('revealed');
+        }
+
+        // Surprise reveal
+        function revealSurprise(card) {
+            card.classList.add('revealed');
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
